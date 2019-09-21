@@ -8,9 +8,11 @@ find_package(SDL2 REQUIRED)
 
 include_directories( "${SDL2_INCLUDE_DIR}/../")
 
+add_subdirectory( "3rd Party/glad")
+
 add_executable( launcher src/main.cpp )
 
-target_link_libraries( launcher ${SDL2_LIBRARY} )
+target_link_libraries( launcher PRIVATE glad  PUBLIC ${SDL2_LIBRARY} )
 
 add_custom_command(TARGET launcher POST_BUILD        # Adds a post-build event to MyTest
     COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
