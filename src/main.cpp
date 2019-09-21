@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <glad/glad.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 int main(int argc, char* argv[])
 {

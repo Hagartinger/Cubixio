@@ -11,7 +11,7 @@ add_subdirectory( "3rd Party/glad")
 
 add_executable( launcher src/main.cpp )
 
-target_include_directories( launcher PUBLIC "${SDL2_INCLUDE_DIR}/../")
+target_include_directories( launcher PUBLIC "${SDL2_INCLUDE_DIR}")
 
 target_link_libraries( launcher PRIVATE glad  PUBLIC ${SDL2_LIBRARY} )
 
