@@ -11,6 +11,7 @@ public:
 	void draw();
 
 	void swapBuffers();
-private:
+
 	SDL_Window* window_;
+	unsigned int programID_;
 };

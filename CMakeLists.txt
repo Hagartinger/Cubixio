@@ -13,6 +13,8 @@ file(GLOB SRC_FILES src/*.cpp src/*.h)
 
 add_executable( launcher ${SRC_FILES} )
 
+target_compile_features(launcher PUBLIC cxx_std_17)
+
 target_include_directories( launcher 
 	PUBLIC 
 		"${SDL2_INCLUDE_DIR}" 
