@@ -1,9 +1,8 @@
 #include <iostream>
 
-#include <glad/glad.h>
 #include <SDL.h>
-#include <glm.hpp>
 
+#include "Render.h"
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -15,21 +14,7 @@ int main(int argc, char* argv[])
 
 	auto window = SDL_CreateWindow("Cubixio", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 	
-	auto context = SDL_GL_CreateContext(window);
-
-	glm::mat4x4;
-	if (context == NULL)
-	{
-		std::cout << "Error: Couldn't initialise OpenGL context\n";
-	}
-
-	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-	
-	float red = 0;
+	Render render{ window };
 	
 	while (true)
 	{
@@ -38,12 +23,9 @@ int main(int argc, char* argv[])
 		if (ev.type == SDL_QUIT)
 			break;
 
-		red += 0.01;
-		glClearColor(std::sin(red), std::sin(red * 3), std::sin(red * red), 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		render.draw();
 
-		SDL_GL_SwapWindow(window);
-		
+		render.swapBuffers();
 	}
 
 

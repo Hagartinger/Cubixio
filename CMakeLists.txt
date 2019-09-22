@@ -9,7 +9,9 @@ find_package(SDL2 REQUIRED)
 
 add_subdirectory( "3rd Party/glad")
 
-add_executable( launcher src/main.cpp )
+file(GLOB SRC_FILES src/*.cpp src/*.h)
+
+add_executable( launcher ${SRC_FILES} )
 
 target_include_directories( launcher 
 	PUBLIC 
