@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <SDL.h>
+#include <glm.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char* argv[])
 	
 	auto context = SDL_GL_CreateContext(window);
 
+	glm::mat4x4;
 	if (context == NULL)
 	{
 		std::cout << "Error: Couldn't initialise OpenGL context\n";
