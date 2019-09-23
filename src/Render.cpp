@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <gtc/type_ptr.hpp>
+
 Render::Render(SDL_Window* window)
 	: window_{ window }
 {
@@ -106,9 +108,29 @@ Render::Render(SDL_Window* window)
 void Render::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	glm::mat4 viewMatrix = glm::lookAt(camera_.position_, camera_.position_ + camera_.eyeVector_, { 0.f, 1.f, 0.f });
+	glm::mat4 projMatrix = glm::perspective(glm::radians(120.f), 4.f / 3.f, 0.001f, 100.f);
+
+	unsigned int viewMatLocation = glGetUniformLocation(programID_, "uViewMatrix");
+	unsigned int projMatLocation = glGetUniformLocation(programID_, "uProjectionMatrix");
+
+	glUniformMatrix4fv(viewMatLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, glm::value_ptr(projMatrix));
 }
 
 void Render::swapBuffers()
 {
 	SDL_GL_SwapWindow(window_);
+}
+
+void Render::moveCamera(float distance)
+{
+	camera_.position_.z += distance;
+}
+
+Camera::Camera()
+{
+	position_ = glm::vec3{ 0.f , 0.f, 3.f };
+	eyeVector_ = glm::vec3{ 0.f, 0.f, -1.f };
 }
