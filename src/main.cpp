@@ -1,8 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+
 #include <SDL.h>
 
 #include "Render.h"
+
+
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -37,8 +41,15 @@ int main(int argc, char* argv[])
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+
+	auto previousTimePoint = std::chrono::high_resolution_clock::now();
+	
 	while (true)
 	{
+		auto now = std::chrono::high_resolution_clock::now();
+		double deltaTime = ( now - previousTimePoint ).count() / (double)std::nano::den;
+		previousTimePoint = now;
+
 		SDL_Event ev;
 		SDL_PollEvent(&ev);
 		if (ev.type == SDL_QUIT)
@@ -49,10 +60,10 @@ int main(int argc, char* argv[])
 			switch (ev.key.keysym.sym)
 			{
 			case SDLK_w:
-				render.moveCamera(1.f);
+				render.moveCamera(deltaTime * 1.f);
 				break;
 			case SDLK_s:
-				render.moveCamera(-1.f);
+				render.moveCamera(deltaTime * -1.f);
 				break;
 			default:
 				break;
