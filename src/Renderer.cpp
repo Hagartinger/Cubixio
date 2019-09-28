@@ -1,4 +1,4 @@
-#include "Render.h"
+#include "Renderer.h"
 
 #include <iostream>
 #include <fstream>
@@ -6,7 +6,7 @@
 
 #include <gtc/type_ptr.hpp>
 
-Render::Render(SDL_Window* window)
+Renderer::Renderer(SDL_Window* window)
 	: window_{ window }
 {
 	auto context = SDL_GL_CreateContext(window);
@@ -105,10 +105,12 @@ Render::Render(SDL_Window* window)
 	glUseProgram(programID_);
 }
 
-void Render::draw()
+void Renderer::draw()
 {
+	//clear
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	//setup camera matrix
 	glm::mat4 viewMatrix = glm::lookAt(camera_.position_, camera_.position_ + camera_.eyeVector_, { 0.f, 1.f, 0.f });
 	glm::mat4 projMatrix = glm::perspective(glm::radians(120.f), 4.f / 3.f, 0.001f, 100.f);
 
@@ -117,14 +119,20 @@ void Render::draw()
 
 	glUniformMatrix4fv(viewMatLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 	glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, glm::value_ptr(projMatrix));
+
+	//here should be scene draw
+
+
+	//and UI draw eventually
+
 }
 
-void Render::swapBuffers()
+void Renderer::swapBuffers()
 {
 	SDL_GL_SwapWindow(window_);
 }
 
-void Render::moveCamera(float distance)
+void Renderer::moveCamera(float distance)
 {
 	camera_.position_.z += distance;
 }

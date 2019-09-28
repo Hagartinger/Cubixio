@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glad/glad.h>
 #include <SDL.h>
 #include <glm.hpp>
@@ -16,11 +18,11 @@ public:
 };
 
 
-class Render
+class Renderer
 {
 public:
-	Render(SDL_Window* window);
-	~Render() = default;
+	Renderer(SDL_Window* window);
+	~Renderer() = default;
 
 	void draw();
 

@@ -4,7 +4,55 @@
 
 #include <SDL.h>
 
-#include "Render.h"
+#include "Renderer.h"
+
+class Mesh
+{
+public:
+	void draw()
+	{
+		glBindVertexArray(vertexArrayObject_);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDrawArrays(GL_TRIANGLES, 0, numberOfVerticies_);
+	}
+
+	static Mesh createTriangle()
+	{
+		Mesh result;
+		float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  1.f , 0.0f
+		};
+
+		result.numberOfVerticies_ = 3;
+
+		glGenVertexArrays(1, &result.vertexArrayObject_);
+		glBindVertexArray(result.vertexArrayObject_);
+
+		unsigned int vertexBufferObject;
+		glGenBuffers(1, &vertexBufferObject);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glBindVertexArray(0);
+		return result;
+	}
+private:
+	unsigned int vertexArrayObject_;
+	unsigned int numberOfVerticies_;
+
+	Mesh() = default;
+
+	friend class MeshPrimitiveFactory;
+};
+class MeshPrimitiveFactory;
+class Terrain;
+class World;
 
 
 int main(int argc, char* argv[])
@@ -18,30 +66,11 @@ int main(int argc, char* argv[])
 
 	auto window = SDL_CreateWindow("Cubixio", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 	
-	Render render{ window };
+	Renderer renderer{ window };
+	
+	//World cubixland; // Initialisation of the 
 
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  1.f , 0.0f
-	};
-
-
-	unsigned int VBO, VAO;
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &VBO);
-
-	std::vector<float> vecVert(std::begin(vertices), std::end(vertices));
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vecVert.size() * sizeof(float), vecVert.data(), GL_STATIC_DRAW);
-	//position atribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-
+	auto triangle = Mesh::createTriangle();
 	auto previousTimePoint = std::chrono::high_resolution_clock::now();
 	
 	while (true)
@@ -60,19 +89,19 @@ int main(int argc, char* argv[])
 			switch (ev.key.keysym.sym)
 			{
 			case SDLK_w:
-				render.moveCamera(deltaTime * 1.f);
+				renderer.moveCamera(deltaTime * 1.f);
 				break;
 			case SDLK_s:
-				render.moveCamera(deltaTime * -1.f);
+				renderer.moveCamera(deltaTime * -1.f);
 				break;
 			default:
 				break;
 			}
 		}
-		render.draw();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		render.swapBuffers();
+		
+		renderer.draw();
+		triangle.draw();
+		renderer.swapBuffers();
 	}
 
 
