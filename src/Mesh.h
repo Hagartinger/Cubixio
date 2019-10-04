@@ -8,6 +8,7 @@ public:
 private:
 	unsigned int vertexArrayObject_;
 	unsigned int numberOfVerticies_;
+	unsigned int textureID_;
 
 	Mesh() = default;
 
@@ -18,7 +19,7 @@ private:
 class MeshPrimitiveFactory
 {
 public:
-	static Mesh createTriangle();
+	//static Mesh createTriangle();
 	static Mesh createCube();
 private:
 	MeshPrimitiveFactory() = delete;

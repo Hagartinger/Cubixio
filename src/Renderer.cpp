@@ -6,6 +6,8 @@
 
 #include <gtc/type_ptr.hpp>
 
+#include <SDL_image.h>
+
 Renderer::Renderer(SDL_Window* window)
 	: window_{ window }
 {
@@ -23,8 +25,12 @@ Renderer::Renderer(SDL_Window* window)
 		std::terminate();
 	}
 
-	glClearColor(0, 0, 0, 0);
+	IMG_Init(IMG_INIT_JPG);
+	//printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+	IMG_Init(IMG_INIT_PNG);
 
+	glClearColor(0, 0, 0, 0);
+	glEnable(GL_DEPTH_TEST);
 	programID_ = glCreateProgram();
 
 	unsigned int vertexShaderID, fragmentShaderID;
@@ -108,7 +114,7 @@ Renderer::Renderer(SDL_Window* window)
 void Renderer::draw()
 {
 	//clear
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//setup camera matrix
 	glm::mat4 viewMatrix = glm::lookAt(camera_.position_, camera_.position_ + camera_.eyeVector_, { 0.f, 1.f, 0.f });
