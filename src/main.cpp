@@ -21,13 +21,12 @@ int main(int argc, char* argv[])
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	
 
 	auto window = SDL_CreateWindow("Cubixio", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 	
 	Renderer renderer{ window };
 	
-	//World cubixland; // Initialisation of the 
+
 
 	auto cube = MeshPrimitiveFactory::createCube();
 	auto previousTimePoint = std::chrono::high_resolution_clock::now();
@@ -39,25 +38,29 @@ int main(int argc, char* argv[])
 		previousTimePoint = now;
 
 		SDL_Event ev;
-		SDL_PollEvent(&ev);
-		if (ev.type == SDL_QUIT)
-			break;
-
-		if (ev.type == SDL_KEYDOWN)
+		while (SDL_PollEvent(&ev))
 		{
-			switch (ev.key.keysym.sym)
+			if (ev.type == SDL_QUIT)
 			{
-			case SDLK_w:
-				renderer.moveCamera(deltaTime * 1.f);
-				break;
-			case SDLK_s:
-				renderer.moveCamera(deltaTime * -1.f);
-				break;
-			default:
-				break;
+				SDL_Quit();
+				return 0;
+			}
+
+			if (ev.type == SDL_KEYDOWN)
+			{
+				switch (ev.key.keysym.sym)
+				{
+				case SDLK_w:
+					renderer.moveCamera(deltaTime * 5.f);
+					break;
+				case SDLK_s:
+					renderer.moveCamera(deltaTime * -5.f);
+					break;
+				default:
+					break;
+				}
 			}
 		}
-		
 		renderer.draw();
 		cube.draw();
 		renderer.swapBuffers();

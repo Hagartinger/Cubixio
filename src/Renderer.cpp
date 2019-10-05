@@ -25,10 +25,17 @@ Renderer::Renderer(SDL_Window* window)
 		std::terminate();
 	}
 
-	IMG_Init(IMG_INIT_JPG);
-	//printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-	IMG_Init(IMG_INIT_PNG);
-
+	if (IMG_Init(IMG_INIT_JPG) != IMG_INIT_JPG)
+	{
+		std::cout << "Failed to initialize SDL2_image for JPG : " << IMG_GetError() << '\n';
+		std::terminate();
+	}
+	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+	{
+		std::cout << "Failed to initialize SDL2_image for PNG : " << IMG_GetError() << '\n';
+		std::terminate();
+	}
+	
 	glClearColor(0, 0, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 	programID_ = glCreateProgram();
