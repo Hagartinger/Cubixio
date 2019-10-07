@@ -8,6 +8,8 @@
 
 #include <SDL_image.h>
 
+#include "Object.h"
+
 Renderer::Renderer(SDL_Window* window)
 	: window_{ window }
 {
@@ -43,7 +45,7 @@ Renderer::Renderer(SDL_Window* window)
 	unsigned int vertexShaderID, fragmentShaderID;
 	{
 		std::ifstream shaderSourceFile;
-		shaderSourceFile.open("../resources/shaders/VertexShader.vert");
+		shaderSourceFile.open("../resources/shaders/SceneVertexShader.vert");
 		if (!shaderSourceFile.is_open())
 		{
 			std::cout << "Error: Couldn't open vertexShader Source file.\n";
@@ -118,7 +120,7 @@ Renderer::Renderer(SDL_Window* window)
 	glUseProgram(programID_);
 }
 
-void Renderer::draw()
+void Renderer::prepareScene()
 {
 	//clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -140,6 +142,14 @@ void Renderer::draw()
 
 }
 
+void Renderer::draw(Object& object)
+{
+	unsigned int modelMatLocation = glGetUniformLocation(programID_, "uModelMatrix");
+
+	glUniformMatrix4fv(modelMatLocation, 1, GL_FALSE, glm::value_ptr(object.worldMatrix_));
+
+	object.mesh_.draw();
+}
 void Renderer::swapBuffers()
 {
 	SDL_GL_SwapWindow(window_);

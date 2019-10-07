@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+class Object;
 
 class Camera
 {
@@ -24,7 +25,9 @@ public:
 	Renderer(SDL_Window* window);
 	~Renderer() = default;
 
-	void draw();
+	void prepareScene();
+
+	void draw(Object& object);
 
 	void swapBuffers();
 

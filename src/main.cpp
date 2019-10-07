@@ -5,10 +5,13 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include <mat4x4.hpp>
+
 #include "Renderer.h"
 #include "Mesh.h"
+#include "Object.h"
 
-class Terrain;
+
 class World;
 
 
@@ -26,9 +29,16 @@ int main(int argc, char* argv[])
 	
 	Renderer renderer{ window };
 	
+	std::vector<Object> cubes;
+	for (int i = 0; i < 4; i++)
+	{
+		Object cube;
+		cube.worldMatrix_ = glm::translate(cube.worldMatrix_, { i * 1.2, 0,0 });
+		cubes.push_back(std::move(cube));
+	}
 
 
-	auto cube = MeshPrimitiveFactory::createCube();
+	
 	auto previousTimePoint = std::chrono::high_resolution_clock::now();
 	
 	while (true)
@@ -61,8 +71,12 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
-		renderer.draw();
-		cube.draw();
+		renderer.prepareScene();
+
+		for ( auto& cube : cubes )
+		{
+			renderer.draw(cube);
+		}
 		renderer.swapBuffers();
 	}
 
