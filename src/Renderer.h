@@ -5,6 +5,9 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+#include <filesystem>
+
+
 class Object;
 
 class Camera
@@ -17,6 +20,15 @@ public:
 	glm::vec3 eyeVector_;
 
 };
+
+class Shader
+{
+public:
+	Shader(std::filesystem::path vertexShader, std::filesystem::path fragmentShader);
+	Shader() {};
+	unsigned int programID_;
+};
+
 
 
 class Renderer
@@ -34,7 +46,8 @@ public:
 	void moveCamera(float distance);
 private:
 	SDL_Window* window_;
-	unsigned int programID_;
 	Camera camera_;
+	Shader sceneShader_;
+	Shader uiShader_;
 };
 

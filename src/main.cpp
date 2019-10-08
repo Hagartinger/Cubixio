@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include <mat4x4.hpp>
 
@@ -14,6 +15,8 @@
 
 class World;
 
+const int cScreenWidth = 800;
+const int cScreenHeight = 600;
 
 int main(int argc, char* argv[])
 {
@@ -25,7 +28,7 @@ int main(int argc, char* argv[])
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 
-	auto window = SDL_CreateWindow("Cubixio", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
+	auto window = SDL_CreateWindow("Cubixio", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL);
 	
 	Renderer renderer{ window };
 	
@@ -36,8 +39,6 @@ int main(int argc, char* argv[])
 		cube.worldMatrix_ = glm::translate(cube.worldMatrix_, { i * 1.2, 0,0 });
 		cubes.push_back(std::move(cube));
 	}
-
-
 	
 	auto previousTimePoint = std::chrono::high_resolution_clock::now();
 	
@@ -77,6 +78,7 @@ int main(int argc, char* argv[])
 		{
 			renderer.draw(cube);
 		}
+
 		renderer.swapBuffers();
 	}
 
