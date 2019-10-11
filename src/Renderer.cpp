@@ -37,7 +37,7 @@ Renderer::Renderer(SDL_Window* window)
 		std::cout << "Failed to initialize SDL2_image for PNG : " << IMG_GetError() << '\n';
 		std::terminate();
 	}
-	
+
 	sceneShader_ = Shader( "../resources/shaders/SceneVertexShader.vert", "../resources/shaders/FragmentShader.frag");
 	uiShader_ = Shader("../resources/shaders/UIVertexShader.vert", "../resources/shaders/FragmentShader.frag");
 
